@@ -43,6 +43,8 @@ let mapleader = "\<Space>"
 nmap <leader>vrc :tabnew $MYVIMRC<cr> 
 " Source current file
 nmap <leader>sop :source %<cr> 
+" Switch between the last two files
+nnoremap <leader><leader> <c-^>
 
 " Note: in order to remap C-s, you need to disable flow control
 " Map Ctrl-s to write the file
@@ -107,8 +109,48 @@ set splitright
 
 set hidden " Allow buffer to change w/o saving
 set scrolloff=4 " Keep at least 4 lines below cursor
-set lazyredraw " Don't update while executing macro
-set backspace=indent,eol,start " Sane backspace behavior
+set backspace=2
+set nobackup
+set nowritebackup
+set ruler " show cursor position at all times
+set showcmd " display incomplete commands
+set incsearch     " do incremental searching
+set laststatus=2  " Always display the status line
+set autowrite     " Automatically :write before running commands
+" Remove swap files
+set noswapfile
+
+" Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
+if executable('ag')
+  " Use Ag over Grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag -Q -l --nocolor --hidden -g "" %s'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+
+  if !exists(":Ag")
+    command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+    nnoremap \ :Ag<SPACE>
+  endif
+endif
+
+" Tab completion
+" will insert tab at beginning of line,
+" will use completion if not at beginning
+set wildmode=list:longest,list:full
+function! InsertTabWrapper()
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    else
+        return "\<c-p>"
+    endif
+endfunction
+inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
+inoremap <S-Tab> <c-n>
 
 " Opens an edit command with the path of the currently edited file filled in
 " Normal mode: <Leader>e
