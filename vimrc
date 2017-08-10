@@ -20,6 +20,9 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-commentary'
 Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tomlion/vim-solidity'
 
 " All of your Plugins must be added before the following line
 call vundle#end()
@@ -33,6 +36,9 @@ syntax on
 
 " Color scheme
 colorscheme jellybeans
+
+" Display extra whitespace
+set list listchars=tab:»·,trail:·,nbsp:·
 
 " Leader commands
 " =============================================
@@ -110,6 +116,7 @@ set splitright
 set hidden " Allow buffer to change w/o saving
 set scrolloff=4 " Keep at least 4 lines below cursor
 set backspace=2
+set history=500
 set nobackup
 set nowritebackup
 set ruler " show cursor position at all times
@@ -159,3 +166,10 @@ map <leader>e :e <C-R>=expand("%:p:h") . "/" <cr>
 " Opens a tab edit command with the path of the currently edited file filled in
 " Normal mode: <Leader>t
 map <leader>te :tabe <C-R>=expand("%:p:h") . "/" <cr>
+
+" Nerdtree
+" open automatically when vim starts up
+" autocmd vimenter * NERDTree
+
+" Jsx syntax
+let g:jsx_ext_required=0
